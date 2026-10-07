@@ -26,13 +26,13 @@ def parse_guess(raw: str):
             value = int(float(raw))
         else:
             value = int(raw)
-    except Exception:
+    except (ValueError, OverflowError):
         return False, None, "That is not a number."
 
     return True, value, None
 
 
-def check_guess(guess, secret):
+def check_guess(guess: int, secret: int):
     """
     Compare guess to secret and return (outcome, message).
 
@@ -41,19 +41,11 @@ def check_guess(guess, secret):
     if guess == secret:
         return "Win", "🎉 Correct!"
 
-    try:
-        # FIXME (Bug 2, fixed): A guess above the secret must tell the player to go lower.
-        if guess > secret:
-            # FIX: AI-assisted comparison now returns the correct lower hint.
-            return "Too High", "📉 Go LOWER!"
-        return "Too Low", "📈 Go HIGHER!"
-    except TypeError:
-        g = str(guess)
-        if g == secret:
-            return "Win", "🎉 Correct!"
-        if g > secret:
-            return "Too High", "📉 Go LOWER!"
-        return "Too Low", "📈 Go HIGHER!"
+    # FIXME (Bug 2, fixed): A guess above the secret must tell the player to go lower.
+    if guess > secret:
+        # FIX: AI-assisted comparison now returns the correct lower hint.
+        return "Too High", "📉 Go LOWER!"
+    return "Too Low", "📈 Go HIGHER!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
@@ -64,12 +56,7 @@ def update_score(current_score: int, outcome: str, attempt_number: int):
             points = 10
         return current_score + points
 
-    if outcome == "Too High":
-        if attempt_number % 2 == 0:
-            return current_score + 5
-        return current_score - 5
-
-    if outcome == "Too Low":
+    if outcome in ("Too High", "Too Low"):
         return current_score - 5
 
     return current_score
