@@ -25,29 +25,30 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+- [x] The game is a Streamlit number guessing game. The player chooses a difficulty, enters guesses, receives hints, and can inspect the current game state in the developer panel.
+- [x] I reproduced three bugs: a fresh game started with Attempts at 1, a guess above the secret incorrectly said to go higher, and New Game left the score and history unchanged.
+- [x] I selected and fixed the first two bugs. I also moved the game logic into `logic_utils.py` and updated the tests to match the `(outcome, message)` API. Bug 3 remains documented as an unfixed issue from Phase 1.
 
 ## 📸 Demo Walkthrough
 
 Describe your fixed game in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Start the Streamlit app and choose a difficulty such as Normal.
+2. Open **Developer Debug Info** before guessing; a fresh game shows Attempts: 0, Score: 0, and an empty History.
+3. Enter a guess and submit it. The game compares the guess with the stable secret and records the attempt.
+4. If the guess is higher than the secret, the hint says `Go LOWER!`; if it is lower, the hint says `Go HIGHER!`.
+5. Use the score and game status messages to continue until winning or reaching the attempt limit.
 
 **Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
 
 ## 🧪 Test Results
 
 ```
-# Paste your pytest output here, e.g.:
-# pytest tests/
-# ========================= X passed in 0.XXs =========================
+> python -m pytest
+4 passed in 2.79s
 ```
+
+The full pytest suite was verified successfully with `python -m pytest`: 4 passed in 2.79s. A second verification run also completed successfully: 4 passed in 2.07s. Streamlit verification is not recorded here because no successful Streamlit result was provided.
 
 ## 🚀 Stretch Features
 
